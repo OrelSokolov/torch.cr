@@ -149,7 +149,10 @@ torch.cr/
       чек: линкуется, кол-во atg_* ~ 2000
 - [ ] **4. generator.cr v2 (Crystal эмиссия)**: lib-декларации + safe-обёртки;
       `{{ run }}`-кэш
-- [ ] **5. CUDA/device**: atm_to(device), стресс-тест GC-финалайзеров
+- [x] **5. CUDA/device**: ✅ `at_to_device`/`at_to_type` в шиме, `Tensor#to`,
+      `Module#to`, `atc_synchronize`; инференс на RTX 5080 через
+      `bin/infer` (p50 0.057ms на mlp.pt), parity с python max_err ~2e-7.
+      Стресс-тест GC-финалайзеров — ещё не делался
 - [ ] **6. Интеграционный**: трейс VoxCPM2-кусков в TorchScript (python, разово)
       → грузим и гоняем из Crystal; сравнение с python-инференсом (twinshot)
 

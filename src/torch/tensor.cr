@@ -188,6 +188,21 @@ class Torch::Tensor
     self
   end
 
+  # -- device transfer -------------------------------------------------------
+
+  # Returns a new tensor on the target device (e.g. Device.cuda(0)).
+  def to(device : Device) : Tensor
+    c = TorchSys.at_to_device(@c_tensor, device.to_c_int)
+    Torch.check!
+    Tensor.new(c)
+  end
+
+  def to(kind : Kind) : Tensor
+    c = TorchSys.at_to_type(@c_tensor, kind.to_i32)
+    Torch.check!
+    Tensor.new(c)
+  end
+
   # -- autograd --------------------------------------------------------------
 
   def requires_grad? : Bool

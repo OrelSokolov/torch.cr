@@ -59,6 +59,10 @@ lib TorchSys
   fun at_requires_grad(t : CTensor) : Int32
   fun at_grad_set_enabled(b : Int32) : Int32
 
+  # ---- device transfer ----
+  fun at_to_device(t : CTensor, device : Int32) : CTensor
+  fun at_to_type(t : CTensor, type : Int32) : CTensor
+
   # ---- device / context ----
   fun atc_cuda_device_count : Int32
   fun atc_cuda_is_available : Int32

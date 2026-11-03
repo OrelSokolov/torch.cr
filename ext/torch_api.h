@@ -88,6 +88,10 @@ void at_backward(tensor t, int keep_graph, int create_graph);
 int at_requires_grad(tensor t);
 int at_grad_set_enabled(int b);
 
+/* ---- device transfer ---- */
+tensor at_to_device(tensor t, int device);
+tensor at_to_type(tensor t, int type);
+
 /* ---- device / context ---- */
 int atc_cuda_device_count();
 int atc_cuda_is_available();

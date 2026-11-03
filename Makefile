@@ -20,13 +20,16 @@ EXT_DIR := $(abspath ext)
 LINK_FLAGS := -L$(EXT_DIR) -Wl,-rpath,$(EXT_DIR) -lstdc++
 LINK_FLAGS_STATIC := -L$(EXT_DIR) -L$(TORCH_LIB) -Wl,-rpath,$(TORCH_LIB) -ltorch -ltorch_cpu -lc10 $(CUDA_LIBS) -lstdc++
 
-.PHONY: ext fixture spec oracle verify clean
+.PHONY: ext fixture spec oracle verify clean print-link-flags
 
 ext:
 	./ext/build.sh
 
 fixture:
 	$(PY) spec/support/gen_fixture.py
+
+print-link-flags:
+	@echo "-L$(EXT_DIR) -Wl,-rpath,$(EXT_DIR) -lstdc++"
 
 oracle: ext fixture
 	crystal build --release -o bin/oracle_dump --link-flags "$(LINK_FLAGS)" bin/oracle_dump.cr

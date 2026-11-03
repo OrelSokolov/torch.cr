@@ -231,6 +231,16 @@ int at_grad_set_enabled(int b) {
   return -1;
 }
 
+tensor at_to_device(tensor t, int device) {
+  PROTECT(return new torch::Tensor(t->to(device_of_int(device)));)
+  return nullptr;
+}
+
+tensor at_to_type(tensor t, int type) {
+  PROTECT(return new torch::Tensor(t->to(at::ScalarType(type)));)
+  return nullptr;
+}
+
 int atc_cuda_device_count() {
   PROTECT(return torch::cuda::device_count();)
   return -1;

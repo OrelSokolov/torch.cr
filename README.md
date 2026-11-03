@@ -42,6 +42,31 @@ Makefile); libtorch в pip-сборке всё равно только дина�
 `$TORCH_VENV/bin/python` → известные venv. ABI (`_GLIBCXX_USE_CXX11_ABI`)
 подбирается под установленную сборку автоматически.
 
+## Приложение: `bin/infer`
+
+TorchScript-раннер с бенчмарком и проверкой против Python-золота:
+
+```bash
+make ext && make fixture
+crystal build --release -o bin/infer --link-flags "$(make -s print-link-flags)" bin/infer.cr   # или см. Makefile
+
+./bin/infer spec/fixtures/mlp.pt --device cpu --iters 100 --golden mlp
+./bin/infer spec/fixtures/mlp.pt --device cuda:0 --iters 200 --golden mlp
+```
+
+Пример вывода (RTX 5080):
+
+```
+device:  cuda:0
+latency: avg=0.119ms  min=0.048ms  p50=0.057ms  max=1.910ms
+out[0..3]: -0.133337 0.265934 0.157105 0.191246
+golden:  OK (mlp, max_err=2.38e-07)
+```
+
+CUDA-путь полностью рабочий: тензор и модуль переносятся на девайс
+(`Tensor#to`, `Module#to`), инференс с синхронизацией, результат копируется
+обратно на CPU и сверяется.
+
 ## Оракул
 
 Два независимых источника правды для результатов:
@@ -56,5 +81,7 @@ Makefile); libtorch в pip-сборке всё равно только дина�
 - [x] явный C-шим (tensor/io/jit/ivalue) — `ext/torch_api.{h,cpp}`
 - [x] Crystal-обёртки Tensor / IValue / Module (12 спеков зелёные)
 - [x] twinshot-оракул: python vs crystal, 6/6
+- [x] CUDA: перенос тензоров/модулей на девайс, инференс на RTX 5080,
+      parity с Python (max_err ~2e-7), бенчмарк-CLI `bin/infer`
 - [ ] генератор полной поверхности ATen (`gen/generator.cr`, см. PLAN.md)
-- [ ] CUDA-пути, оптимизаторы, автоген при `shards install`
+- [ ] оптимизаторы, автоген при `shards install`
