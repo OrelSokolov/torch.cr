@@ -1,0 +1,6 @@
+name: torch
+version: 0.1.0
+authors:
+  - Oleg Orlov
+description: libtorch bindings for Crystal (handwritten C shim + TorchScript; full ATen codegen planned)
+license: MIT

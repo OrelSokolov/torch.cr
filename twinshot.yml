@@ -1,0 +1,9 @@
+# twinshot oracle: python torch (golden) vs Crystal torch.cr (current).
+# Report: twinshot-report/default/ (report_for_agent.md / report_for_human.html)
+oracle:
+  path: oracle/golden
+  generate: /home/oleg/dataset-vox-cpm2/.venv/bin/python spec/support/oracle_dump.py
+
+current:
+  path: oracle/current
+  generate: ./bin/oracle_dump

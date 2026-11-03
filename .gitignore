@@ -1,0 +1,12 @@
+/doc/
+/libs/
+/lib/
+/bin/*
+!/bin/detect_torch.sh
+!/bin/oracle_dump.cr
+/ext/*.a
+/ext/*.so
+/ext/*.o
+/spec/fixtures/*.pt
+/oracle/current/
+/twinshot-report/
