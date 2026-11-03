@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  spec:
+    runs-on: ubuntu-latest
+    env:
+      LIBTORCH: /tmp/torchpkg
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: crystal-lang/install-crystal@v1
+        with:
+          crystal: 1.21.1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install torch (cpu wheel; provides headers + libs for the shim)
+        run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -c 'import torch,os;print(os.path.dirname(torch.__file__))'
+          ln -s "$(python -c 'import torch,os;print(os.path.dirname(torch.__file__))')" "$LIBTORCH"
+
+      - name: Build C shim
+        run: ./ext/build.sh
+
+      - name: Generate fixtures
+        run: python spec/support/gen_fixture.py
+
+      - name: Specs
+        run: |
+          EXT="$(pwd)/ext"
+          crystal spec --link-flags "-L$EXT -Wl,-rpath,$EXT -lstdc++"
