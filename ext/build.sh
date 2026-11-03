@@ -28,7 +28,7 @@ if [ -z "${CXX11_ABI:-}" ]; then
   CXX11_ABI="$("$PY" -c 'import torch;print(int(torch._C._GLIBCXX_USE_CXX11_ABI))' 2>/dev/null || echo 1)"
 fi
 
-FLAGS=(-std=c++17 -O2 -fPIC -D_GLIBCXX_USE_CXX11_ABI="$CXX11_ABI" -I"${INC[0]}" -I"${INC[1]}")
+FLAGS=(-std=c++20 -O2 -fPIC -D_GLIBCXX_USE_CXX11_ABI="$CXX11_ABI" -I"${INC[0]}" -I"${INC[1]}")
 
 echo "torch:    $TORCH"
 echo "cxx:      $CXX ${FLAGS[*]}"
